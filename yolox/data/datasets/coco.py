@@ -3,14 +3,18 @@
 # Copyright (c) Megvii, Inc. and its affiliates.
 
 import os
+import sys
+
 from loguru import logger
 
 import cv2
 import numpy as np
 from pycocotools.coco import COCO
 
+
 from ..dataloading import get_yolox_datadir
 from .datasets_wrapper import Dataset
+from .my_dataset import MyDataSet
 
 
 def remove_useless_info(coco):
@@ -61,7 +65,7 @@ class COCODataset(Dataset):
         self.data_dir = data_dir
         self.json_file = json_file
 
-        self.coco = COCO(os.path.join(self.data_dir, "annotations", self.json_file))
+        self.coco = MyDataSet(os.path.join(self.data_dir, "annotations", self.json_file))
         remove_useless_info(self.coco)
         self.ids = self.coco.getImgIds()
         self.class_ids = sorted(self.coco.getCatIds())

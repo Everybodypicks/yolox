@@ -4,7 +4,6 @@
 
 import argparse
 import random
-import sys
 import warnings
 from loguru import logger
 
