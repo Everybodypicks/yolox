@@ -9,7 +9,7 @@ fileNamePath = os.path.split(os.path.realpath(__file__))[0]
 path = os.path.join(fileNamePath, 'datasets/COCO/annotations/instances_train2017.json')
 
 
-with open('C:\\Users\\Every\\Desktop\\yolox\\datasets\\COCO\\annotations\\instances_train2017.json', 'r', encoding='utf-8') as f:
+with open('../datasets\\COCO\\annotations\\instances_train2017.json', 'r', encoding='utf-8') as f:
     dataset = json.load(f)
 
 COCO_CLASSES = []

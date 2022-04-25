@@ -114,6 +114,7 @@ def main(exp: Exp, args):
     cudnn.benchmark = True
 
     trainer = exp.get_trainer(args)
+    print(1)
     trainer.train()
 
 
