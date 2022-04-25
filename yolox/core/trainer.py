@@ -170,6 +170,19 @@ class Trainer:
             self.ema_model = ModelEMA(model, 0.9998)
             self.ema_model.updates = self.max_iter * self.start_epoch
 
+        # 对于 字典而言，in 或 not in 运算符都是基于 key 来判断的
+
+        ckpt = torch.load('../yolox_x.pth', map_location="cpu")
+        # load the model state dict
+        ckpt["model"].pop('head.cls_preds.0.weight')
+        ckpt["model"].pop('head.cls_preds.0.bias')
+        ckpt["model"].pop('head.cls_preds.1.weight')
+        ckpt["model"].pop('head.cls_preds.1.bias')
+        ckpt["model"].pop('head.cls_preds.2.weight')
+        ckpt["model"].pop('head.cls_preds.2.bias')
+
+        model.load_state_dict(ckpt["model"], strict=False)
+
         self.model = model
 
         self.evaluator = self.exp.get_evaluator(
