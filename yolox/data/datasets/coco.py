@@ -72,6 +72,7 @@ class COCODataset(Dataset):
         cats = self.coco.loadCats(self.coco.getCatIds())
 
         self._classes = tuple([c["name"] for c in cats])
+        print(len(self._classes))
         self.imgs = None
         self.name = name
         self.img_size = img_size

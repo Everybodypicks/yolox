@@ -37,11 +37,25 @@ class Trainer:
     def __init__(self, exp: Exp, args):
         # init function only defines some basic attr, other attrs like model, optimizer are built in
         # before_train methods.
+        self.iter = None
+        self.epoch = None
+        self.start_epoch = None
+        self.tblogger = None
+        self.wandb_logger = None
+        self.evaluator = None
+        self.max_iter = None
+        self.ema_model = None
+        self.model = None
+        self.lr_scheduler = None
+        self.no_aug = None
+        self.train_loader = None
+        self.optimizer = None
+        self.prefetcher = None
         self.exp = exp
         self.args = args
 
         # training related attr
-        self.max_epoch = exp.max_epoch
+        self.max_epoch = 100
         self.amp_training = args.fp16
         self.scaler = torch.cuda.amp.GradScaler(enabled=args.fp16)
         self.is_distributed = get_world_size() > 1
@@ -169,8 +183,6 @@ class Trainer:
         if self.use_model_ema:
             self.ema_model = ModelEMA(model, 0.9998)
             self.ema_model.updates = self.max_iter * self.start_epoch
-
-        # 对于 字典而言，in 或 not in 运算符都是基于 key 来判断的
 
         ckpt = torch.load('../yolox_x.pth', map_location="cpu")
         # load the model state dict

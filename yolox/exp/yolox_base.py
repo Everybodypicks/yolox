@@ -288,12 +288,8 @@ class Exp(BaseExp):
         else:
             sampler = torch.utils.data.SequentialSampler(valdataset)
 
-        dataloader_kwargs = {
-            "num_workers": self.data_num_workers,
-            "pin_memory": True,
-            "sampler": sampler,
-        }
-        dataloader_kwargs["batch_size"] = batch_size
+        dataloader_kwargs = {"num_workers": self.data_num_workers, "pin_memory": True, "sampler": sampler,
+                             "batch_size": batch_size}
         val_loader = torch.utils.data.DataLoader(valdataset, **dataloader_kwargs)
 
         return val_loader
