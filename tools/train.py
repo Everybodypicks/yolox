@@ -3,12 +3,18 @@
 # Copyright (c) Megvii, Inc. and its affiliates.
 
 import argparse
+import os
 import random
+import sys
 import warnings
 from loguru import logger
 
 import torch
 import torch.backends.cudnn as cudnn
+
+root_path = os.path.abspath(__file__)
+root_path = '/'.join(root_path.split('/')[:-2])
+sys.path.append(root_path)
 
 from yolox.core import launch
 from yolox.exp import Exp, get_exp
