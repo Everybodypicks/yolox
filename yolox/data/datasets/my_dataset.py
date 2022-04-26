@@ -14,6 +14,10 @@ if PYTHON_VERSION == 2:
 elif PYTHON_VERSION == 3:
     from urllib.request import urlretrieve
 
+root_path = os.path.abspath(__file__)
+root_path = '/'.join(root_path.split('/')[:-2])
+sys.path.append(root_path)
+
 
 class MyDataSet(COCO):
     def __init__(self, annotation_file=None):
