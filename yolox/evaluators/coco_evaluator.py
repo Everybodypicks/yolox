@@ -82,15 +82,15 @@ class COCOEvaluator:
     """
 
     def __init__(
-        self,
-        dataloader,
-        img_size: int,
-        confthre: float,
-        nmsthre: float,
-        num_classes: int,
-        testdev: bool = False,
-        per_class_AP: bool = False,
-        per_class_AR: bool = False,
+            self,
+            dataloader,
+            img_size: int,
+            confthre: float,
+            nmsthre: float,
+            num_classes: int,
+            testdev: bool = False,
+            per_class_AP: bool = False,
+            per_class_AR: bool = False,
     ):
         """
         Args:
@@ -113,13 +113,13 @@ class COCOEvaluator:
         self.per_class_AR = per_class_AR
 
     def evaluate(
-        self,
-        model,
-        distributed=False,
-        half=False,
-        trt_file=None,
-        decoder=None,
-        test_size=None,
+            self,
+            model,
+            distributed=False,
+            half=False,
+            trt_file=None,
+            decoder=None,
+            test_size=None,
     ):
         """
         COCO average precision (AP) Evaluation. Iterate inference on the test dataset
@@ -159,7 +159,7 @@ class COCOEvaluator:
             model = model_trt
 
         for cur_iter, (imgs, _, info_imgs, ids) in enumerate(
-            progress_bar(self.dataloader)
+                progress_bar(self.dataloader)
         ):
             with torch.no_grad():
                 imgs = imgs.type(tensor_type)
@@ -185,6 +185,8 @@ class COCOEvaluator:
                     nms_time += nms_end - infer_end
 
             data_list.extend(self.convert_to_coco_format(outputs, info_imgs, ids))
+        json_file = open('./result.json', 'w+')
+        json_file.write(json.dumps(data_list, indent=4, ensure_ascii=False))
 
         statistics = torch.cuda.FloatTensor([inference_time, nms_time, n_samples])
         if distributed:
@@ -199,7 +201,7 @@ class COCOEvaluator:
     def convert_to_coco_format(self, outputs, info_imgs, ids):
         data_list = []
         for (output, img_h, img_w, img_id) in zip(
-            outputs, info_imgs[0], info_imgs[1], ids
+                outputs, info_imgs[0], info_imgs[1], ids
         ):
             if output is None:
                 continue
@@ -223,7 +225,7 @@ class COCOEvaluator:
                     "category_id": label,
                     "bbox": bboxes[ind].numpy().tolist(),
                     "score": scores[ind].numpy().item(),
-                    "segmentation": [],
+                    # "segmentation": [],
                 }  # COCO json format
                 data_list.append(pred_data)
         return data_list
@@ -247,13 +249,14 @@ class COCOEvaluator:
             [
                 "Average {} time: {:.2f} ms".format(k, v)
                 for k, v in zip(
-                    ["forward", "NMS", "inference"],
-                    [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
-                )
+                ["forward", "NMS", "inference"],
+                [a_infer_time, a_nms_time, (a_infer_time + a_nms_time)],
+            )
             ]
         )
 
         info = time_info + "\n"
+        print(info)
 
         # Evaluate the Dt (detection) json comparing with the ground truth
         if len(data_dict) > 0:

@@ -6,6 +6,7 @@ import os
 
 filePath = os.path.dirname(__file__)
 fileNamePath = os.path.split(os.path.realpath(__file__))[0]
+
 path = os.path.join(fileNamePath, 'datasets/COCO/annotations/instances_train2017.json')
 
 
